@@ -19,10 +19,10 @@ export function LoginForm() {
         <label htmlFor="terms" className="text-sm ml-2">I agree to the <Link className="text-blue-600" href='/'>terms and conditions</Link></label>
       </div>
       <Button type="submit" className="w-full">Log In</Button>
-      <div class="flex items-center">
-        <div class="flex-1 h-[1px] bg-gray-300"></div>
-        <span class="px-4 text-gray-500 text-sm">or</span>
-        <div class="flex-1 h-[1px] bg-gray-300"></div>
+      <div className="flex items-center">
+        <div className="flex-1 h-[1px] bg-gray-300"></div>
+        <span className="px-4 text-gray-500 text-sm">or</span>
+        <div className="flex-1 h-[1px] bg-gray-300"></div>
       </div>
       <Button variant="outline" className="w-full mt-4">Log in with Google</Button>
     </form>
