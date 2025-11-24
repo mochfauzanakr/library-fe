@@ -3,6 +3,9 @@ import Hero from "@/components/landing/Hero";
 import Carousel from "@/components/landing/Carousel";
 import AboutUs from "@/components/landing/AboutUs";
 import Testimonials from "@/components/landing/Testimonials";
+import BooksPreview from "@/components/landing/BooksPreview";
+import CTA from "@/components/landing/CTA";
+import Footer from "@/components/landing/footer";
 
 export default function Home() {
   return (
@@ -34,6 +37,20 @@ export default function Home() {
           <Testimonials />
         </div>
       </section>
+
+      <section className="py-16 md:py-24 lg:py-32">
+        <div className="max-w-6xl mx-auto px-6">
+          <BooksPreview />
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24 lg:py-32">
+        <div className="max-w-6xl mx-auto px-6">
+          <CTA />
+        </div>
+      </section>
+    
+    <Footer />
     </div>
   );
 }

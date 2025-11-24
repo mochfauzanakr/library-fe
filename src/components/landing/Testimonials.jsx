@@ -12,6 +12,7 @@ const testimonials = [
   {
     name: "Rina",
     comment: "Perpustakaannya rapi banget dan koleksinya lengkap!",
+    image: ""
   },
   {
     name: "Budi",
