@@ -1,32 +1,39 @@
-import Carousel from "@/components/landing/carousel";
-import Nav from "@/components/landing/nav";
-import AboutUs from "@/components/landing/abousUs";
-import Hero from "@/components/landing/hero";
+import Nav from "@/components/landing/Nav";
+import Hero from "@/components/landing/Hero";
+import Carousel from "@/components/landing/Carousel";
+import AboutUs from "@/components/landing/AboutUs";
+import Testimonials from "@/components/landing/Testimonials";
 
 export default function Home() {
   return (
     <div>
       <Nav />
-      <section className="max-w-6xl mx-auto flex flex-col md:flex-row items-center px-6 gap-12 mb-16 py-16 md:py-24 lg:py-32">
+
+      {/* HERO */}
+      <section className="max-w-6xl mx-auto px-6">
         <Hero />
       </section>
 
+      {/* CAROUSEL */}
       <section className="py-16 md:py-24 lg:py-32">
-        <div className="flex justify-center mb-12 flex-col items-center px-6 text-center max-w-4xl mx-auto gap-4">
-          <div className="width[80%]">
-            <Carousel />
-          </div>
+        <div className="max-w-6xl mx-auto px-6">
+          <Carousel />
         </div>
       </section>
 
-      <section className="py-16 md:py-24 lg:py-32">
-        <div className=" mx-auto px-6">
+      {/* ABOUT US */}
+      <section className="py-16 md:py-24 lg:py-32 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6">
           <AboutUs />
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      <section className="py-16 md:py-24 lg:py-32">
+        <div className="max-w-6xl mx-auto px-6">
+          <Testimonials />
+        </div>
+      </section>
     </div>
-
-
   );
 }

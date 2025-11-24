@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 
 export default function Nav() {
   return (
-<nav className="z-20 max-w-6xl mx-auto flex items-center justify-between py-4 mt-4 px-6 rounded-3xl border border-slate-200 shadow-sm bg-white/70 backdrop-blur sticky top-4">
+<nav className="sticky top-4 z-20 w-full">
+  <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-6 rounded-3xl border border-slate-200 shadow-sm bg-white/70 backdrop-blur">
         <Link href="/" className="text-lg font-semibold">Library System</Link>
 
         <div className="hidden md:flex gap-6">
@@ -20,6 +21,7 @@ export default function Nav() {
           <Link href='/register'>
           <Button>Sign up</Button>
           </Link>
+        </div>
         </div>
       </nav>
   );
