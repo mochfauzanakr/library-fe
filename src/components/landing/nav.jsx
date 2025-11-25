@@ -16,7 +16,7 @@ export default function Nav() {
 
         <div className="flex gap-3">
           <Link href="/login">
-          <Button variant="outline" className='text-primary hover:text-primary/80'>Log in</Button>
+          <Button variant="outline" className='text-primary hover:text-primary/90'>Log in</Button>
           </Link>
           <Link href='/register'>
           <Button>Sign up</Button>

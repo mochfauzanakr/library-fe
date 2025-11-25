@@ -45,7 +45,7 @@ export default function BooksPreview() {
                 <CardTitle className="text-lg">{book.title}</CardTitle>
 
                 <a
-                  href={`/books/${book.id_book}`}
+                  href={`/register`}
                   className="mt-4 inline-block text-primary underline text-sm hover:text-primary/80"
                 >
                   Lihat Detail →
