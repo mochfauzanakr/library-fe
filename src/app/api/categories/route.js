@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const db = await getDb();
     const [rows] = await db.query(
-      "SELECT id_category, name, description FROM categories ORDER BY name ASC"
+      "SELECT id_category, name, description FROM categories ORDER BY id_category ASC"
     );
     return NextResponse.json(rows);
   } catch (err) {

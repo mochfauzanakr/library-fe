@@ -27,7 +27,7 @@ export async function GET(request) {
       FROM books b
       LEFT JOIN categories c ON c.id_category = b.category_id
       LEFT JOIN racks r ON r.id_rack = b.rack_id
-      ORDER BY b.id_book DESC
+      ORDER BY b.id_book ASC
       LIMIT ${limit};
     `);
 
