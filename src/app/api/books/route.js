@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { success } from "zod";
 
 export async function GET(request) {
   try {
@@ -31,7 +32,10 @@ export async function GET(request) {
       LIMIT ${limit};
     `);
 
-    return NextResponse.json(rows);
+    return NextResponse.json({
+      success: true,
+      data: rows,
+    });
 
   } catch (err) {
     console.error("BOOK API ERROR:", err);

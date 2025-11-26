@@ -7,7 +7,10 @@ export async function GET() {
     const [rows] = await db.query(
       "SELECT id_category, name, description FROM categories ORDER BY id_category ASC"
     );
-    return NextResponse.json(rows);
+    return NextResponse.json({
+      success: true,
+      data: rows,
+    });
   } catch (err) {
     console.error("Kategori Error:", err);
     return new NextResponse("Server Error", { status: 500 });

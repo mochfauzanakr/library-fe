@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { success } from "zod";
 
 export async function GET(request, { params }) {
   try {
@@ -51,7 +52,8 @@ export async function GET(request, { params }) {
     `, [id, id]);
 
     return NextResponse.json({
-      book,
+      success: true,
+      data:book,
       related_books: related,
     });
 
