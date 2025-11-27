@@ -11,7 +11,7 @@ export default function BooksPreview() {
     async function load() {
       const res = await fetch("/api/books?limit=8");
       const data = await res.json();
-      setBooks(data);
+      setBooks(data.data);
     }
     load();
   }, []);

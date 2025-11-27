@@ -1,58 +1,58 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { getDb } from "@/lib/db";
+import { registerSchema } from "@/lib/validation/auth";
+import { formatZodErrors } from "@/lib/validation/utils/zodErrorFormatter";
 
-export async function POST(request) {
+export async function POST(req) {
   try {
-    const { email, password } = await request.json();
+    const body = await req.json();
+
+    // ⭐ Validate with Zod
+    const parsed = registerSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { errors: formatZodErrors(parsed.error.errors) },
+        { status: 400 }
+      );
+    }
+
+    const { username, email, password } = parsed.data;
 
     const db = await getDb();
-    const [rows] = await db.query(
-      "SELECT * FROM users WHERE email = ? LIMIT 1",
+
+    // ⭐ Check duplicate email
+    const [exists] = await db.query(
+      "SELECT id_user FROM users WHERE email = ? LIMIT 1",
       [email]
     );
 
-    if (rows.length === 0) {
-      return new NextResponse("Invalid credentials", { status: 401 });
+    if (exists.length > 0) {
+      return NextResponse.json(
+        { errors: { email: "Email sudah terdaftar" } },
+        { status: 409 }
+      );
     }
 
-    const user = rows[0];
+    // ⭐ Hash password
+    const hashed = await bcrypt.hash(password, 10);
 
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) {
-      return new NextResponse("Invalid credentials", { status: 401 });
-    }
-
-    const token = jwt.sign(
-      {
-        id: user.id_user,
-        email: user.email,
-        role: user.role,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+    // ⭐ Save user (role = user default)
+    await db.query(
+      "INSERT INTO users (username, email, password, role, created_at) VALUES (?, ?, ?, ?, NOW())",
+      [username, email, hashed, "user"]
     );
 
-    const response = NextResponse.json({
-      message: "Login success",
-      user: {
-        id: user.id_user,
-        username: user.username,
-        role: user.role,
-      },
-    });
-
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: false,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    return response;
+    return NextResponse.json(
+      { success: true, message: "Register berhasil" },
+      { status: 201 }
+    );
   } catch (err) {
-    console.error(err);
-    return new NextResponse("Login error", { status: 500 });
+    console.error("REGISTER API ERROR:", err);
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
   }
 }
