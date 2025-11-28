@@ -54,19 +54,21 @@ export default async function UserHomePage() {
               <Link key={book.id_book} href={`/books/${book.id_book}`}>
                 <Card className="hover:bg-accent transition cursor-pointer">
                   <CardContent className="p-3 max-w-[180px] mx-auto">
-                    <Image
-                      src={`/img/book_img/${book.book_cover}`}
-                      alt={book.title}
-                      width={300}
-                      height={400}
-                      className="w-full h-36 object-cover rounded-md"
-                    />
+                    <div className="w-full h-40 bg-white rounded-md overflow-hidden flex items-center justify-center">
+                      <Image
+                        src={`/img/book_img/${book.book_cover}`}
+                        alt={book.title}
+                        width={300}
+                        height={400}
+                        className="object-contain w-full h-full"
+                      />
+                    </div>
+
                     <p className="font-semibold mt-2 text-sm truncate">{book.title}</p>
                     <p className="text-xs text-muted-foreground truncate">{book.author}</p>
                     <p className="text-xs text-muted-foreground truncate">{book.category}</p>
                   </CardContent>
                 </Card>
-
               </Link>
             ))}
           </div>
@@ -82,18 +84,22 @@ export default async function UserHomePage() {
             <Link key={book.id_book} href={`/books/${book.id_book}`}>
               <Card className="hover:bg-accent transition cursor-pointer">
                 <CardContent className="p-3 max-w-[180px] mx-auto">
-                  <Image
-                    src={`/img/book_img/${book.book_cover}`}
-                    alt={book.title}
-                    width={300}
-                    height={400}
-                    className="w-full h-36 object-cover rounded-md"
-                  />
+                  <div className="w-full h-40 bg-white rounded-md overflow-hidden flex items-center justify-center">
+                    <Image
+                      src={`/img/book_img/${book.book_cover}`}
+                      alt={book.title}
+                      width={300}
+                      height={400}
+                      className="object-contain w-full h-full"
+                    />
+                  </div>
+
                   <p className="font-semibold mt-2 text-sm truncate">{book.title}</p>
                   <p className="text-xs text-muted-foreground truncate">{book.author}</p>
                   <p className="text-xs text-muted-foreground truncate">{book.category}</p>
                 </CardContent>
               </Card>
+
 
             </Link>
           ))}
