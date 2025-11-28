@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
-import { success } from "zod";
+import { BOOK_FIELDS } from "@/lib/sql/bookFields";
 
 export async function GET(request, { params }) {
   try {
@@ -8,24 +8,10 @@ export async function GET(request, { params }) {
     const db = await getDb();
 
     const [bookRows] = await db.query(`
-      SELECT 
-        b.id_book,
-        b.isbn,
-        b.book_cover,
-        b.title,
-        b.author,
-        b.publisher,
-        b.description,
-        b.language,
-        b.original_year,
-        b.total_pages,
-        b.stock,
-        b.created_at,
-        c.name AS category,
-        r.rack_code AS rack_code
-      FROM books b
-      LEFT JOIN categories c ON c.id_category = b.category_id
-      LEFT JOIN racks r ON r.id_rack = b.rack_id
+        SELECT ${BOOK_FIELDS}
+        FROM books b
+        LEFT JOIN categories c ON c.id_category = b.category_id
+        LEFT JOIN racks r ON r.id_rack = b.rack_id
       WHERE b.id_book = ?
       LIMIT 1
     `, [id]);
@@ -54,7 +40,7 @@ export async function GET(request, { params }) {
     return NextResponse.json({
       success: true,
       data:book,
-      related_books: related,
+      related: related,
     });
 
   } catch (err) {

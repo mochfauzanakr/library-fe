@@ -1,3 +1,4 @@
+// app/api/auth/[...nextauth]/route.js
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -5,6 +6,7 @@ import { getDb } from "@/lib/db";
 
 export const authOptions = {
   session: { strategy: "jwt" },
+
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -13,7 +15,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize({ email, password }) {
-        console.log("AUTHORIZE RUNNING:", email, password);
+        console.log("AUTHORIZE RUNNING:", email);
 
         const db = await getDb();
         const [rows] = await db.execute(
@@ -38,8 +40,9 @@ export const authOptions = {
           return null;
         }
 
+        // VERY IMPORTANT: id harus konsisten
         const returnUser = {
-          id: user.id_user,
+          id: user.id_user,       // <== ini yang nanti dipakai di token.id
           username: user.username,
           email: user.email,
           role: user.role,
@@ -47,27 +50,42 @@ export const authOptions = {
 
         console.log("RETURN:", returnUser);
         return returnUser;
-      }
-
+      },
     }),
   ],
+
   callbacks: {
     async jwt({ token, user }) {
+      // user hanya ada di first login
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.username = user.username;
+        token.email = user.email;
       }
       return token;
     },
+
     async session({ session, token }) {
+      // pastikan session.user selalu ada
+      if (!session.user) {
+        session.user = {};
+      }
+
       session.user.id = token.id;
       session.user.role = token.role;
+      session.user.username = token.username;
+      session.user.email = token.email;
+
       return session;
     },
   },
+
+  pages: {
+    signIn: "/login",
+  },
 };
 
-// wajib dibungkus pakai authOptions
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

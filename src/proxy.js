@@ -1,44 +1,38 @@
+// middleware.js
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req) {
-    const token = req.nextauth.token;   // JWT dari NextAuth
+    const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
 
-    console.log(" PROXY ACTIVE:", path);
-    console.log(" TOKEN:", token);
+    console.log("PROXY ACTIVE:", path);
+    console.log("TOKEN:", token);
 
-    
     if (!token) {
-      console.log(" NO TOKEN → redirect to /login");
+      console.log("NO TOKEN → redirect to /login");
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
     const role = token.role;
+    const res = NextResponse.next();
 
-  
+    // kirim role ke layout via header
+    res.headers.set("x-user-role", role);
 
-    // USER mencoba akses dashboard → FORBIDDEN
+    // RULE AKSES (sesuai requirement lu)
+    // user biasa tidak boleh masuk dashboard
     if (role === "user" && path.startsWith("/dashboard")) {
-      console.log(" USER trying to enter DASHBOARD → FORBIDDEN");
+      console.log("USER trying to enter /dashboard → FORBIDDEN");
       return NextResponse.rewrite(new URL("/forbidden", req.url));
     }
 
-    // STAFF mencoba akses user area → FORBIDDEN
-    if (role === "staff" && path.startsWith("/user")) {
-      console.log(" STAFF trying to enter USER area → FORBIDDEN");
-      return NextResponse.rewrite(new URL("/forbidden", req.url));
-    }
-
-    // Admin bebas akses semua halaman
-    // (Tidak perlu aturan tambahan)
+    // (kalau mau: batasi staff ke area tertentu, bisa tambahin di sini)
 
     console.log("ACCESS ALLOWED");
-    return NextResponse.next();
+    return res;
   },
-
-  // jika belum login, NextAuth otomatis redirect
   {
     pages: { signIn: "/login" },
   }
@@ -46,7 +40,9 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    "/dashboard/:path*", // area admin & staff
-    "/user/:path*",      // area user biasa
+    "/dashboard",
+    "/dashboard/:path*",
+    "/user",
+    "/user/:path*",
   ],
 };

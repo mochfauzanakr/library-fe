@@ -1,14 +1,11 @@
-import Sidebar from "@/components/navigationAndRelated/Sidebar";
+"use client";
 
+import { useSession } from "next-auth/react";
+import AppLayout from "@/components/layout/appLayout";
 
 export default function DashboardLayout({ children }) {
-  return (
-    <div className="flex min-h-screen bg-muted">
-      <Sidebar />
+  const { data } = useSession();
+  const role = data?.user?.role || "user";
 
-      <main className="flex-1 p-10">
-        {children}
-      </main>
-    </div>
-  );
+  return <AppLayout role={role}>{children}</AppLayout>;
 }
