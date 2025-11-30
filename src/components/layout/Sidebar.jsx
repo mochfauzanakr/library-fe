@@ -60,9 +60,9 @@ const MENU = {
       title: "Menu",
       items: [
         { href: "/user/home", label: "Home", icon: Home },
-        { href: "/user/home/books", label: "Books", icon: Book },
-        { href: "/user/home/favorites", label: "Favorites", icon: Bookmark },
-        { href: "/user/home/categories", label: "Categories", icon: Folder },
+        { href: "/user/books", label: "Books", icon: Book },
+        { href: "/user/favorites", label: "Favorites", icon: Bookmark },
+        { href: "/user/categories", label: "Categories", icon: Folder },
       ],
     },
   ],
@@ -76,9 +76,9 @@ export default function Sidebar({ role, collapsed, setCollapsed }) {
       open={!collapsed}
       onOpenChange={() => setCollapsed(!collapsed)}
       className={`
-        h-screen border-r bg-muted/40 fixed left-0 top-0 z-40
-        transition-all duration-300 
-        ${collapsed ? "w-20" : "w-64"}
+        min-h-screen border-r bg-muted/40 fixed left-0 top-0 z-40
+  transition-all duration-300 
+        ${collapsed ? "w-12" : "w-40"}
       `}
     >
       {/* Header */}
@@ -89,7 +89,7 @@ export default function Sidebar({ role, collapsed, setCollapsed }) {
         </CollapsibleTrigger>
       </div>
 
-      {/* Menu */}
+      {/* Menu */}  
       <CollapsibleContent className="overflow-hidden">
         <nav className="px-4 py-3 flex flex-col gap-6">
           {config.map((section) => (

@@ -31,6 +31,8 @@ export const authOptions = {
         }
 
         const user = rows[0];
+        console.log("USER FROM DB:", user);
+
         const match = await bcrypt.compare(password, user.password);
 
         console.log("MATCH:", match);

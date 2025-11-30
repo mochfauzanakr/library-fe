@@ -14,7 +14,8 @@ export async function GET(request) {
           b.book_cover,
           b.title,
           b.author,
-          c.name AS category
+          c.name AS category,
+          b.created_at AS added_at
         FROM books b
         LEFT JOIN categories c 
           ON c.id_category = b.category_id
@@ -31,6 +32,9 @@ export async function GET(request) {
 
   } catch (err) {
     console.error("NEW BOOK API ERROR:", err);
-    return new NextResponse({ success: false, message: "Failed to fetch new arrival", error: err.message },{ status: 500 });
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch new arrival", error: err.message },
+      { status: 500 }
+    );
   }
 }
