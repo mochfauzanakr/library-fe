@@ -23,9 +23,11 @@ const cover =
 
 
   return (
-    <Card className="border shadow-sm hover:shadow-md transition">
+    <Card className="relative border shadow-sm hover:shadow-md transition">
       <CardContent className="p-4">
-        <Link href={`/user/borrowings/${item.id_borrows}`} className="absolute inset-0 z-10"></Link>
+        <Link 
+      href={`/user/borrowings/${item.id_borrows}`} 
+      className="absolute inset-0 z-10"/>
         <div className="flex gap-5">
 
           {/* Book Cover */}
