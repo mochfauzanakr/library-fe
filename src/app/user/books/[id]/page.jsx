@@ -1,4 +1,8 @@
 import Image from "next/image";
+import WishlistButton from "@/components/wishlist/WishlistButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import BorrowButton from "@/components/user/BorrowButton";
 
 async function fetchBook(id) {
   const res = await fetch(
@@ -13,6 +17,10 @@ async function fetchBook(id) {
 }
 
 export default async function BookDetailPage(props) {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+  console.log("USER ID:", userId);
+
   const { id } = await props.params;
   const book = await fetchBook(id);
 
@@ -31,13 +39,14 @@ export default async function BookDetailPage(props) {
 
         {/* LEFT COVER */}
         <div className="w-full sm:w-[300px]">
-          <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden bg-muted shadow">
+          <div className="relative w-full h-full aspect-[3/4] rounded-md overflow-hidden bg-muted shadow">
             <Image
               src={`/img/book_img/${book.book_cover}`}
               alt={book.title}
               fill
               className="object-cover"
             />
+            <WishlistButton bookId={book.id_book} userId={userId} />
           </div>
         </div>
 
@@ -53,16 +62,16 @@ export default async function BookDetailPage(props) {
           <Detail label="Pages" value={book.total_pages || "—"} />
           <Detail label="Stock" value={book.stock} />
           <Detail label="Rack Code" value={book.rack_code} />
-          <Detail 
+          <Detail
             label="Added At"
             value={new Date(book.created_at).toLocaleDateString()}
           />
 
           {/* BORROW BUTTON */}
-          <button 
-            className="mt-4 w-full py-2 bg-primary text-white rounded-md hover:bg-primary/80 transition">
-            Borrow Book
-          </button>
+          <BorrowButton
+          bookId={book.id_book}   // ← INI WAJIB ADA
+          stock={book.stock} 
+          />
 
         </div>
       </div>

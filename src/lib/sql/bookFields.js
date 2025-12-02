@@ -1,5 +1,3 @@
-// src/lib/sql/bookFields.js
-
 export const BOOK_FIELDS = `
   b.id_book,
   b.isbn,
@@ -7,6 +5,7 @@ export const BOOK_FIELDS = `
   b.title,
   b.author,
   b.publisher,
+  b.category_id,
   c.name AS category,
   b.description,
   b.language,

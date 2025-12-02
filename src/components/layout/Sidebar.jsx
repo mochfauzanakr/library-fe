@@ -15,6 +15,9 @@ import {
   UserRoundCog,
   Library,
   Menu,
+  ListChecks,
+  Clipboard,
+  ClipboardList,
 } from "lucide-react";
 
 const MENU = {
@@ -61,8 +64,9 @@ const MENU = {
       items: [
         { href: "/user/home", label: "Home", icon: Home },
         { href: "/user/books", label: "Books", icon: Book },
-        { href: "/user/favorites", label: "Favorites", icon: Bookmark },
+        { href: "/user/wishlist", label: "Wishlist", icon: Bookmark },
         { href: "/user/categories", label: "Categories", icon: Folder },
+        { href: "/user/borrowings", label: "Borrow History", icon: ClipboardList },
       ],
     },
   ],
@@ -78,14 +82,14 @@ export default function Sidebar({ role, collapsed, setCollapsed }) {
       className={`
         min-h-screen border-r bg-muted/40 fixed left-0 top-0 z-40
   transition-all duration-300 
-        ${collapsed ? "w-12" : "w-40"}
+        ${collapsed ? "w-14" : "w-40"}
       `}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
         {!collapsed && <h1 className="font-bold text-lg">Library</h1>}
         <CollapsibleTrigger className="p-2 rounded hover:bg-muted">
-          <Menu size={20} />
+          <Menu size={20}/>
         </CollapsibleTrigger>
       </div>
 
