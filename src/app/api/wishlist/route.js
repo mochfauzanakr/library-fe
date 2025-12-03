@@ -46,3 +46,26 @@ export async function GET(req) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const db = await getDb();
+    const body = await req.json().catch(() => ({}));
+    const wishlist_id = body?.wishlist_id ?? body?.id_wishlist;
+
+    if (!wishlist_id) {
+      return NextResponse.json(
+        { error: "Missing wishlist_id" },
+        { status: 400 }
+      );
+    }
+
+    await db.query("DELETE FROM wishlist WHERE id_wishlist = ?", [
+      wishlist_id,
+    ]);
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

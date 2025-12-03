@@ -15,19 +15,21 @@ import {
   UserRoundCog,
   Library,
   Menu,
-  ListChecks,
-  Clipboard,
   ClipboardList,
 } from "lucide-react";
 
+// ————————————————————————————————————————————————
+// FIXED MENU DATA
+// Semua href diseragamkan untuk dashboard admin/staff
+// ————————————————————————————————————————————————
 const MENU = {
   admin: [
     {
       title: "Main",
       items: [
         { href: "/dashboard", label: "Dashboard", icon: Home },
-        { href: "/books", label: "Books", icon: Book },
-        { href: "/categories", label: "Categories", icon: Folder },
+        { href: "/dashboard/books", label: "Books", icon: Book },
+        { href: "/dashboard/categories", label: "Categories", icon: Folder },
       ],
     },
     {
@@ -45,8 +47,8 @@ const MENU = {
       title: "Main",
       items: [
         { href: "/dashboard", label: "Dashboard", icon: Home },
-        { href: "/books", label: "Books", icon: Book },
-        { href: "/categories", label: "Categories", icon: Folder },
+        { href: "/dashboard/books", label: "Books", icon: Book },
+        { href: "/dashboard/categories", label: "Categories", icon: Folder },
       ],
     },
     {
@@ -72,6 +74,21 @@ const MENU = {
   ],
 };
 
+// ————————————————————————————————————————————————
+// FIXED ICON WRAPPER
+// Semua ikon dijamin memiliki ukuran box yang sama
+// ————————————————————————————————————————————————
+function IconWrapper({ Icon }) {
+  return (
+    <div className="w-5 h-5 flex items-center justify-center">
+      <Icon className="w-5 h-5" />
+    </div>
+  );
+}
+
+// ————————————————————————————————————————————————
+// MAIN SIDEBAR
+// ————————————————————————————————————————————————
 export default function Sidebar({ role, collapsed, setCollapsed }) {
   const config = MENU[role] || MENU.user;
 
@@ -79,21 +96,18 @@ export default function Sidebar({ role, collapsed, setCollapsed }) {
     <Collapsible
       open={!collapsed}
       onOpenChange={() => setCollapsed(!collapsed)}
-      className={`
-        min-h-screen border-r bg-muted/40 fixed left-0 top-0 z-40
-  transition-all duration-300 
-        ${collapsed ? "w-14" : "w-40"}
-      `}
+      className={`min-h-screen border-r bg-muted/40 fixed left-0 top-0 z-40
+        transition-all duration-300 ${collapsed ? "w-14" : "w-40"}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
         {!collapsed && <h1 className="font-bold text-lg">Library</h1>}
         <CollapsibleTrigger className="p-2 rounded hover:bg-muted">
-          <Menu size={20}/>
+          <Menu size={20} />
         </CollapsibleTrigger>
       </div>
 
-      {/* Menu */}  
+      {/* Menu */}
       <CollapsibleContent className="overflow-hidden">
         <nav className="px-4 py-3 flex flex-col gap-6">
           {config.map((section) => (
@@ -111,7 +125,7 @@ export default function Sidebar({ role, collapsed, setCollapsed }) {
                     key={m.href}
                     className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent transition"
                   >
-                    <m.icon size={20} />
+                    <IconWrapper Icon={m.icon} />
                     {!collapsed && <span>{m.label}</span>}
                   </Link>
                 ))}

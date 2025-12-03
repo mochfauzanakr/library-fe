@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./topbar";
 
-export default function AppLayout({ role, children }) {
+export default function AppLayout({ role, children, topbar }) {
   const [collapsed, setCollapsed] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
@@ -34,7 +34,7 @@ export default function AppLayout({ role, children }) {
           transition: "margin-left 0.3s ease",
         }}
       >
-        <Topbar role={role} />
+        {topbar}
 
         <main className="p-4 sm:p-6 max-w-full overflow-x-hidden">
           <div className="w-full max-w-[1100px] mx-auto">
