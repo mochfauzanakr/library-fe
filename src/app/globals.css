@@ -8,6 +8,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-dashboard-pending: var(--dashboard-pending);
+  --color-dashboard-approved: var(--dashboard-approved);
+  --color-dashboard-late: var(--dashboard-late);
+  --color-dashboard-returned: var(--dashboard-returned);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -76,6 +80,10 @@
   --sidebar-accent-foreground: oklch(0.20 0.03 250);
   --sidebar-border: oklch(0.88 0.02 250);
   --sidebar-ring: oklch(0.72 0.12 260);
+  --dashboard-pending: oklch(0.88 0.05 85);      /* soft muted yellow  */
+  --dashboard-approved: oklch(0.80 0.05 230);    /* soft blue */
+  --dashboard-late: oklch(0.75 0.08 25);         /* muted red */
+  --dashboard-returned: oklch(0.78 0.04 150);    /* muted green */
   --chart-1: oklch(0.65 0.245 261.5);  
   --chart-2: oklch(0.70 0.15 205);     
   --chart-3: oklch(0.75 0.12 140);     
@@ -115,6 +123,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --dashboard-pending: oklch(0.60 0.05 85);
+  --dashboard-approved: oklch(0.55 0.05 230);
+  --dashboard-late: oklch(0.60 0.08 25);
+  --dashboard-returned: oklch(0.58 0.04 150);
 }
 
 @layer base {

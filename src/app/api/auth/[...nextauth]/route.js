@@ -74,6 +74,9 @@ export const authOptions = {
         session.user = {};
       }
 
+      // jika token tidak ada (belum login / session expired) kembalikan null
+      if (!token) return null;
+
       session.user.id = token.id;
       session.user.role = token.role;
       session.user.username = token.username;

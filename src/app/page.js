@@ -9,12 +9,32 @@ import Footer from "@/components/landing/footer";
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-gradient-to-b from-slate-50 via-white to-slate-50">
       <Nav />
 
-      {/* HERO */}
-      <section className="max-w-6xl mx-auto px-6">
-        <Hero />
+      {/* HERO + Value Props */}
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_#a5b4fc33,_transparent_45%),_radial-gradient(circle_at_30%_60%,_#38bdf833,_transparent_35%)]" />
+        <div className="max-w-6xl mx-auto px-6">
+          <Hero />
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 pb-12">
+            {[
+              { title: "Smart Search", desc: "Temukan buku dalam hitungan detik dengan kategori dan keyword." },
+              { title: "Realtime Stock", desc: "Lihat ketersediaan tanpa harus datang ke rak fisik." },
+              { title: "Borrow Tracking", desc: "Pantau status pinjaman dan jadwal pengembalian." },
+              { title: "Staff Friendly", desc: "Kelola koleksi dan pengguna dari satu dashboard." },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border bg-white/70 backdrop-blur shadow-sm p-4"
+              >
+                <h3 className="font-semibold text-lg">{item.title}</h3>
+                <p className="text-sm text-slate-600 mt-1">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* CAROUSEL */}

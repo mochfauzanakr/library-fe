@@ -38,8 +38,10 @@ const MENU = {
         { href: "/dashboard/manage-users", label: "Manage Users", icon: Users },
         { href: "/dashboard/manage-books", label: "Manage Books", icon: Library },
         { href: "/dashboard/manage-staff", label: "Manage Staff", icon: UserRoundCog },
+        { href: "/dashboard/borrows", label: "Borrow Records", icon: ClipboardList },
       ],
     },
+
   ],
 
   staff: [
@@ -56,6 +58,7 @@ const MENU = {
       items: [
         { href: "/dashboard/manage-users", label: "Users", icon: Users },
         { href: "/dashboard/manage-books", label: "Manage Books", icon: Library },
+        { href: "/dashboard/borrows", label: "Borrow Records", icon: ClipboardList },
       ],
     },
   ],

@@ -1,5 +1,5 @@
-import AddStaffModal from "@/components/staff/modals/AddStaffModal";
-import StaffActions from "@/components/staff/StaffAction";
+import AddStaffModal from "@/components/admin/staff/modals/AddStaffModal";
+import StaffActions from "@/components/admin/staff/StaffAction";
 
 async function getStaff() {
   const res = await fetch(

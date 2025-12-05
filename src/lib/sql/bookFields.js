@@ -12,6 +12,7 @@ export const BOOK_FIELDS = `
   b.original_year,
   b.total_pages,
   b.stock,
+  b.rack_id,
   r.rack_code AS rack_code,
   b.created_at
 `;
