@@ -81,15 +81,22 @@ export default function BorrowTable({ borrows, meta }) {
         <Button
           variant={statusFilter === "pending" ? "default" : "outline"}
           size="sm"
-          onClick={() => setStatusFilter("pending")}
-        >
-          Pending{showCounts && filterCounts.pending ? ` (${filterCounts.pending})` : ""}
-        </Button>
-        <Button
-          variant={statusFilter === "approved" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setStatusFilter("approved")}
-        >
+      onClick={() => setStatusFilter("pending")}
+    >
+      Pending{showCounts && filterCounts.pending ? ` (${filterCounts.pending})` : ""}
+    </Button>
+    <Button
+      variant={statusFilter === "rejected" ? "default" : "outline"}
+      size="sm"
+      onClick={() => setStatusFilter("rejected")}
+    >
+      Rejected{filterCounts.rejected ? ` (${filterCounts.rejected})` : ""}
+    </Button>
+    <Button
+      variant={statusFilter === "approved" ? "default" : "outline"}
+      size="sm"
+      onClick={() => setStatusFilter("approved")}
+    >
           Approved{filterCounts.approved ? ` (${filterCounts.approved})` : ""}
         </Button>
         <Button
@@ -131,8 +138,20 @@ export default function BorrowTable({ borrows, meta }) {
                 const isApproved = br.status === "approved";
                 const isReturned = br.status === "return";
                 const isLate = br.status === "late";
+                const isRejected = br.status === "rejected";
                 const fine = br.fine_amount ? Number(br.fine_amount) : 0;
                 const fineStatus = br.fine_status || (fine > 0 ? "unpaid" : "none");
+                const canApprove = isPending;
+                const canReject = isPending;
+                const canMarkLate = isApproved;
+                const canMarkReturned = (isApproved || isLate) && fineStatus !== "paid";
+                const canMarkFinePaid = isLate && fineStatus !== "paid";
+                const noActions =
+                  !canApprove &&
+                  !canReject &&
+                  !canMarkLate &&
+                  !canMarkReturned &&
+                  !canMarkFinePaid;
 
                 return (
                   <tr key={br.id_borrows} className="border-t">
@@ -157,7 +176,7 @@ export default function BorrowTable({ borrows, meta }) {
                           <MoreVertical size={16} />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          {isPending && (
+                          {canApprove && (
                             <DropdownMenuItem
                               onClick={() =>
                                 updateBorrow(
@@ -171,7 +190,21 @@ export default function BorrowTable({ borrows, meta }) {
                             </DropdownMenuItem>
                           )}
 
-                          {isApproved && (
+                          {canReject && (
+                            <DropdownMenuItem
+                              onClick={() =>
+                                updateBorrow(
+                                  br.id_borrows,
+                                  "reject",
+                                  "Reject this borrow request?"
+                                )
+                              }
+                            >
+                              Reject
+                            </DropdownMenuItem>
+                          )}
+
+                          {canMarkLate && (
                             <DropdownMenuItem
                               onClick={() =>
                                 updateBorrow(
@@ -185,7 +218,7 @@ export default function BorrowTable({ borrows, meta }) {
                             </DropdownMenuItem>
                           )}
 
-                          {(isApproved || isLate) && fineStatus !== "paid" && (
+                          {canMarkReturned && (
                             <DropdownMenuItem
                               onClick={() =>
                                 updateBorrow(
@@ -199,7 +232,7 @@ export default function BorrowTable({ borrows, meta }) {
                             </DropdownMenuItem>
                           )}
 
-                          {isLate && fineStatus !== "paid" && (
+                          {canMarkFinePaid && (
                             <DropdownMenuItem
                               onClick={() => {
                                 setSelectedBorrow(br);
@@ -211,7 +244,7 @@ export default function BorrowTable({ borrows, meta }) {
                             </DropdownMenuItem>
                           )}
 
-                          {(isReturned || isLate) && (
+                          {noActions && (
                             <DropdownMenuItem disabled>
                               No actions available
                             </DropdownMenuItem>

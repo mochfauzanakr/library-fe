@@ -2,6 +2,13 @@
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Topbar({ title, search }) {
   const { data: session } = useSession();
@@ -16,9 +23,18 @@ export default function Topbar({ title, search }) {
 
       <div className="flex items-center gap-4">
         {search}
-        <Avatar className="h-9 w-9 border">
-          <AvatarFallback>{initial}</AvatarFallback>
-        </Avatar>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="rounded-full focus:outline-none">
+            <Avatar className="h-9 w-9 border">
+              <AvatarFallback>{initial}</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40 text-red-500">
+            <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

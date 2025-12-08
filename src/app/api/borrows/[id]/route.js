@@ -10,8 +10,30 @@ function toMySQLDate(date) {
   return d.toISOString().slice(0, 19).replace("T", " ");
 }
 
+async function ensureBorrowStatusHasRejected(db) {
+  const [rows] = await db.query(
+    `
+    SELECT COLUMN_TYPE
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_NAME = 'borrowings' AND COLUMN_NAME = 'status'
+    `
+  );
+
+  const columnType = rows?.[0]?.COLUMN_TYPE || "";
+  if (columnType.includes("'rejected'")) return;
+
+  // Extend enum to include rejected
+  await db.query(
+    `
+    ALTER TABLE borrowings
+    MODIFY status ENUM('pending','approved','return','late','rejected') NOT NULL DEFAULT 'pending'
+    `
+  );
+}
+
 export async function PATCH(req, context) {
   const db = await getDb();
+  await ensureBorrowStatusHasRejected(db);
   const params = context?.params ? await context.params : await context;
   const id = params?.id;
 
@@ -42,6 +64,28 @@ export async function PATCH(req, context) {
   const bookId = borrow.book_id;
   const now = new Date();
   const nowMySQL = toMySQLDate(now);
+
+  if (action === "reject") {
+    if (borrow.status !== "pending") {
+      return NextResponse.json(
+        { error: "Only pending requests can be rejected" },
+        { status: 400 }
+      );
+    }
+
+    await db.query(
+      `
+      UPDATE borrowings
+      SET status = 'rejected',
+          admin_id = ?,
+          fine_amount = 0,
+          fine_status = 'none',
+          actual_return = NULL
+      WHERE id_borrows = ?
+      `,
+      [actorId, id]
+    );
+  }
 
   if (action === "approve") {
     await db.query(

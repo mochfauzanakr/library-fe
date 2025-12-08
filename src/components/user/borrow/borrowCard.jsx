@@ -81,6 +81,15 @@ function Detail({ label, value }) {
 }
 
 function StatusBadge({ status }) {
+  const normalized = status === "return" ? "returned" : status;
+  const labelMap = {
+    pending: "Pending",
+    approved: "Approved",
+    late: "Late",
+    return: "Returned",
+    returned: "Returned",
+    rejected: "Rejected",
+  };
   const colors = {
     pending: "bg-yellow-500 text-black hover:bg-yellow-600",
     approved: "bg-blue-600 text-white hover:bg-blue-700",
@@ -88,14 +97,15 @@ function StatusBadge({ status }) {
     returned: "bg-green-600 text-white hover:bg-green-700",
     rejected: "bg-gray-400 text-white hover:bg-gray-500",
   };
+  const label = labelMap[status] || (status ? status : "-");
 
   return (
     <Badge
       className={`px-2 py-1 text-[10px] font-semibold rounded-md ${
-        colors[status] || "bg-gray-300 text-black"
+        colors[normalized] || "bg-gray-300 text-black"
       }`}
     >
-      {status.toUpperCase()}
+      {label.toUpperCase()}
     </Badge>
   );
 }

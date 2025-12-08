@@ -56,6 +56,54 @@ export async function PUT(request, context) {
       rack_id,
     } = body;
 
+    const normalizeOptionalNumber = (value) => {
+      if (value === "" || value === undefined || value === null) return null;
+      const num = Number(value);
+      return Number.isNaN(num) ? NaN : num;
+    };
+
+    const normalizeNumberWithDefault = (value, fallback = 0) => {
+      if (value === "" || value === undefined || value === null) return fallback;
+      const num = Number(value);
+      return Number.isNaN(num) ? NaN : num;
+    };
+
+    const parsedCategoryId = normalizeOptionalNumber(category_id);
+    const parsedOriginalYear = normalizeOptionalNumber(original_year);
+    const parsedYear = normalizeOptionalNumber(year ?? original_year);
+    const parsedPages = normalizeOptionalNumber(total_pages);
+    const parsedRackId = normalizeOptionalNumber(rack_id);
+    const parsedStock = normalizeNumberWithDefault(stock, 0);
+
+    const parsedNumbers = [
+      parsedCategoryId,
+      parsedOriginalYear,
+      parsedYear,
+      parsedPages,
+      parsedRackId,
+      parsedStock,
+    ];
+
+    if (parsedNumbers.some((v) => Number.isNaN(v))) {
+      return NextResponse.json(
+        { error: "Numeric fields must contain valid numbers" },
+        { status: 400 }
+      );
+    }
+
+    const isNegative = (n) => typeof n === "number" && n < 0;
+    if (
+      isNegative(parsedOriginalYear) ||
+      isNegative(parsedYear) ||
+      isNegative(parsedPages) ||
+      isNegative(parsedStock)
+    ) {
+      return NextResponse.json(
+        { error: "Year, pages, and stock must be zero or positive" },
+        { status: 400 }
+      );
+    }
+
     const [result] = await db.query(
       `
       UPDATE books
@@ -81,14 +129,14 @@ export async function PUT(request, context) {
         title,
         author,
         publisher || null,
-        category_id || null,
+        parsedCategoryId,
         description || null,
         language || null,
-        original_year || null,
-        year || original_year || null,
-        total_pages || null,
-        stock ?? 0,
-        rack_id || null,
+        parsedOriginalYear,
+        parsedYear,
+        parsedPages,
+        parsedStock,
+        parsedRackId,
         id,
       ]
     );

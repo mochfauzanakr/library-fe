@@ -1,13 +1,22 @@
 import AddStaffModal from "@/components/admin/staff/modals/AddStaffModal";
 import StaffActions from "@/components/admin/staff/StaffAction";
+import { headers } from "next/headers";
 
 async function getStaff() {
+  const headerList = await headers();
+  const cookieHeader = headerList?.get("cookie");
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/staff`,
-    { cache: "no-store" }
+    {
+      cache: "no-store",
+      headers: cookieHeader ? { cookie: cookieHeader } : undefined,
+    }
   );
 
-  if (!res.ok) return [];
+  if (!res.ok) {
+    console.error("Failed to fetch staff", res.status);
+    return [];
+  }
 
   const { data } = await res.json();
   return data;

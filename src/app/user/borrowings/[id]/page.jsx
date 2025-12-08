@@ -57,7 +57,7 @@ export default async function BorrowDetailPage({ params }) {
             </div>
 
             <Badge className="capitalize">
-              {detail.status}
+              {formatStatus(detail.status)}
             </Badge>
           </div>
 
@@ -110,4 +110,18 @@ function formatDate(date) {
   } catch {
     return "—";
   }
+}
+
+function formatStatus(status) {
+  const map = {
+    pending: "Pending",
+    approved: "Approved",
+    late: "Late",
+    return: "Returned",
+    returned: "Returned",
+    rejected: "Rejected",
+  };
+
+  if (!status) return "—";
+  return map[status] || status;
 }

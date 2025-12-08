@@ -4,6 +4,19 @@ import bcrypt from "bcryptjs";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getDb } from "@/lib/db";
 
+async function ensureSoftDeleteColumns(db) {
+  try {
+    await db.query("ALTER TABLE users ADD COLUMN is_deleted TINYINT(1) NOT NULL DEFAULT 0");
+  } catch (err) {
+    if (err?.code !== "ER_DUP_FIELDNAME") throw err;
+  }
+  try {
+    await db.query("ALTER TABLE users ADD COLUMN deleted_at DATETIME NULL DEFAULT NULL");
+  } catch (err) {
+    if (err?.code !== "ER_DUP_FIELDNAME") throw err;
+  }
+}
+
 async function requireSession() {
   const session = await getServerSession(authOptions);
   const role = session?.user?.role;
@@ -22,13 +35,14 @@ export async function GET(request) {
     }
 
     const db = await getDb();
+    await ensureSoftDeleteColumns(db);
     const url = new URL(request.url);
     const page = Number(url.searchParams.get("page")) || 1;
     const limit = Number(url.searchParams.get("limit")) || 20;
     const search = url.searchParams.get("q") || "";
     const offset = (page - 1) * limit;
 
-    let where = "WHERE 1=1";
+    let where = "WHERE u.is_deleted = 0";
     const params = [];
 
     if (search) {
